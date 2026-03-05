@@ -1,19 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
     const monthsContainer = document.getElementById('heatmap-container');
     const tooltip = document.getElementById('tooltip');
-    const decryptBtn = document.getElementById('decrypt-btn');
     const modal = document.getElementById('reveal-modal');
     const closeBtn = document.getElementById('close-modal');
     const postItList = document.getElementById('post-it-list');
     const valHours = document.getElementById('val-hours');
 
+    // New Audio and Media elements
+    const revealAudio = document.getElementById('reveal-audio');
+    const revealExtrasWrapper = document.getElementById('reveal-extras-wrapper');
+    const btnRevealExtras = document.getElementById('btn-reveal-extras');
+    const extraFilesSection = document.getElementById('extra-files-section');
+
+    // --- CONFETTI LOGIC (Bleu Blanc Rouge) ---
+    const shootConfetti = () => {
+        if (typeof confetti !== 'function') return;
+
+        const duration = 3000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                zIndex: 10000,
+                colors: ['#0055A4', '#FFFFFF', '#EF4135'] // French flag colors
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                zIndex: 10000,
+                colors: ['#0055A4', '#FFFFFF', '#EF4135']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    };
+
     // --- INTRO SEQUENCE LOGIC ---
     const introOverlay = document.getElementById('intro-overlay');
     const folderTrigger = document.getElementById('folder-trigger');
     if (introOverlay && folderTrigger) {
-        folderTrigger.addEventListener('click', () => {
-            introOverlay.classList.add('hidden');
-        });
+        // The click event is removed from the folder itself.
+        // It will open automatically based on the audio timeline.
     }
 
     // Events Dictionary
@@ -23,53 +58,53 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- CLASSIFIED EVENTS (Based on actual timeline) ---
-    addEvent('2025-01-13', 'lv-1', 'Initialisation', 'Téléchargement données brutes S.I.M.O.N.E', 0);
+    addEvent('2025-01-13', 'lv-1', 'Initialisation', 'Lancement du didacticiel S.I.M.O.N.E', 0);
 
     addEvent('2025-03-12', 'lv-5', 'Test théorique', 'Résultat : Corrompu (Test 1)', 0);
     addEvent('2025-03-22', 'lv-5', 'Test théorique', 'Résultat : Corrompu (Test 2)', 0);
-    addEvent('2025-03-28', 'lv-4', 'Test théorique', 'Résultat : Déchiffrement réussi', 0);
+    addEvent('2025-03-28', 'lv-4', 'Test théorique', 'Résultat : Objectif minimum atteint', 0);
 
-    addEvent('2025-04-09', 'lv-3', 'Phase B', 'Reconnaissance terrain initiale', 1);
+    addEvent('2025-04-09', 'lv-3', 'Phase 2', 'Reconnaissance terrain initiale', 1);
 
     // June 2025: 1h
     ['2025-06-10', '2025-06-12', '2025-06-13', '2025-06-17', '2025-06-19', '2025-06-20', '2025-06-24', '2025-06-26', '2025-06-27'].forEach(d => {
-        addEvent(d, 'lv-3', 'Opération', 'Entrainement', 1);
+        addEvent(d, 'lv-3', 'Session', 'Entrainement', 1);
     });
 
     // Sept 2025: 1h
     ['2025-09-02', '2025-09-04', '2025-09-05', '2025-09-11'].forEach(d => {
-        addEvent(d, 'lv-3', 'Opération', 'Entrainement', 1);
+        addEvent(d, 'lv-3', 'Session', 'Entrainement', 1);
     });
 
     // Sept - Nov 2025: 2h
     ['2025-09-18', '2025-09-25', '2025-10-02', '2025-10-09', '2025-10-16', '2025-11-06'].forEach(d => {
-        addEvent(d, 'lv-3', 'Opération', 'Entrainement', 2);
+        addEvent(d, 'lv-3', 'Session', 'Entrainement', 2);
     });
 
     // Nov 2025: 1h
     ['2025-11-13', '2025-11-18'].forEach(d => {
-        addEvent(d, 'lv-3', 'Opération', 'Entrainement', 1);
+        addEvent(d, 'lv-3', 'Session', 'Entrainement', 1);
     });
 
     // Nov 2025: 2h
-    addEvent('2025-11-20', 'lv-3', 'Opération', 'Entrainement', 2);
+    addEvent('2025-11-20', 'lv-3', 'Session', 'Entrainement', 2);
 
-    addEvent('2025-11-24', 'lv-5', 'Opération déviée', 'Statut : Échec critique', 0);
+    addEvent('2025-11-24', 'lv-5', 'Session déviée', 'Statut : Échec critique', 0);
 
     // Jan 2026: 1h
     ['2026-01-08', '2026-01-15', '2026-01-22', '2026-01-27', '2026-01-28'].forEach(d => {
-        addEvent(d, 'lv-3', 'Opération', 'Maintenance', 1);
+        addEvent(d, 'lv-3', 'Session', 'Entrainement', 1);
     });
 
     // Attempt 2 
     addEvent('2026-01-28', 'lv-5', 'Extraction Principale (v2)', 'Statut : Paramètres instables, échec', 1);
 
     // Feb 2026
-    addEvent('2026-02-12', 'lv-3', 'Opération', 'Entrainement', 1);
-    addEvent('2026-02-25', 'lv-3', 'Opération', 'Ultime mise au point', 2);
+    addEvent('2026-02-12', 'lv-3', 'Session', 'Entrainement', 1);
+    addEvent('2026-02-25', 'lv-3', 'Session', 'Entrainement', 2);
 
     // Favorable
-    addEvent('2026-02-26', 'lv-4', 'Validation du Dossier', 'Statut : CIBLE ACQUISE. Autorisation délivrée.', 0);
+    addEvent('2026-02-26', 'lv-4', 'Validation du Dossier', 'Statut : Déclassifié.', 0);
 
     // --- RENDER CALENDAR ---
     let html = '';
@@ -193,12 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tooltip.innerHTML = tooltipHtml;
                 tooltip.style.opacity = '1';
 
-                if (cell.classList.contains('lv-4') && cell.getAttribute('data-title') === 'Validation du Dossier') {
-                    if (!decryptBtn.classList.contains('visible')) {
-                        decryptBtn.classList.remove('hidden');
-                        decryptBtn.classList.add('visible');
-                    }
-                }
+
             }
         });
 
@@ -217,25 +247,78 @@ document.addEventListener('DOMContentLoaded', () => {
         monthsContainer.addEventListener('click', (e) => {
             const cell = e.target.closest('.day-cell');
             if (cell && cell.classList.contains('lv-4') && cell.getAttribute('data-title') === 'Validation du Dossier') {
-                decryptBtn.classList.remove('hidden');
-                decryptBtn.classList.add('visible');
-                modal.classList.add('active');
-            }
-        });
-    }
+                // Show the TOP SECRET folder overlay IMMEDIATELY
+                if (introOverlay) {
+                    introOverlay.style.display = 'flex';
+                }
 
-    if (decryptBtn) {
-        decryptBtn.addEventListener('click', () => {
-            modal.classList.add('active');
+                // Play the surprise audio immediately
+                if (revealAudio) {
+                    revealAudio.volume = 0.5;
+                    revealAudio.currentTime = 0;
+                    revealAudio.play().catch(e => console.log("Audio play blocked by browser:", e));
+
+                    // Track if the modal has been opened to prevent multiple triggers
+                    let modalOpened = false;
+
+                    revealAudio.addEventListener('timeupdate', () => {
+                        // Trigger opening when audio hits 29.7 seconds
+                        if (!modalOpened && revealAudio.currentTime >= 29.7) {
+                            modalOpened = true;
+
+                            // Trigger the 'open' CSS animation on the folder
+                            if (folderTrigger) {
+                                folderTrigger.classList.add('open');
+                            }
+
+                            // Let the animation play (600-800ms), then hide folder and show modal
+                            setTimeout(() => {
+                                if (introOverlay) {
+                                    introOverlay.style.display = 'none';
+                                }
+                                modal.classList.add('active');
+                                setTimeout(shootConfetti, 400);
+                            }, 800);
+                        }
+                    });
+                } else {
+                    // Fallback if no audio element exists (shouldn't happen, but just in case)
+                    setTimeout(() => {
+                        if (introOverlay) introOverlay.style.display = 'none';
+                        setTimeout(() => {
+                            modal.classList.add('active');
+                            setTimeout(shootConfetti, 400);
+                        }, 800);
+                    }, 3000);
+                }
+            }
         });
     }
 
     if (closeBtn) {
         closeBtn.addEventListener('click', () => {
             modal.classList.remove('active');
+            // Show the button to reveal extra archives once the dossier is read
+            if (revealExtrasWrapper) {
+                setTimeout(() => {
+                    revealExtrasWrapper.classList.remove('hidden');
+                }, 400); // Wait for modal fade out
+            }
         });
     }
 
+    // --- REVEAL EXTRA MEDIA SECTION ---
+    if (btnRevealExtras && extraFilesSection) {
+        btnRevealExtras.addEventListener('click', () => {
+            revealExtrasWrapper.classList.add('hidden'); // Hide the button
+            extraFilesSection.classList.remove('hidden'); // Show the videos/photos
+
+            // Scroll to the new section smoothly
+            setTimeout(() => {
+                extraFilesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        });
+    }
     const renderParticles = () => {
         const pContainer = document.getElementById('particles');
         let phtml = '';

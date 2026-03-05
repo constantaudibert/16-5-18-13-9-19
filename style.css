@@ -10,11 +10,11 @@
     /* Heatmap colors (minimalist circles) */
     --c-0: transparent;
     /* empty grid cell */
-    --c-1: #cbd5e1;
+    --c-1: #4697fa;
     /* archive */
     --c-2: #94a3b8;
     /* scale 1 */
-    --c-3: #475569;
+    --c-3: #fef08a;
     /* scale 2 */
     --c-4: #2e7d32;
     /* green success */
@@ -250,6 +250,7 @@ h1 span {
 
 .day-cell.lv-3 {
     background-color: var(--c-3);
+    color: #172554 !important
 }
 
 .day-cell.lv-4 {
@@ -474,7 +475,7 @@ h1 span {
     color: #444;
 }
 
-/* Modal */
+/* Modal — Classified Dossier */
 .modal {
     position: fixed;
     top: 0;
@@ -487,7 +488,7 @@ h1 span {
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.5s ease;
 }
 
 .modal.active {
@@ -501,131 +502,357 @@ h1 span {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
+    background: rgba(30, 25, 18, 0.85);
+    backdrop-filter: blur(6px);
 }
 
-.modal-content.glass-panel {
+/* The dossier page — LANDSCAPE layout */
+.modal-content.dossier-page {
     position: relative;
-    background: white;
-    border: 3px solid var(--text-primary);
-    border-radius: 12px;
-    padding: 3rem;
-    max-width: 600px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 15px 15px 0px rgba(0, 0, 0, 0.1);
-    transform: scale(0.9) translateY(20px);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: #fdf6e3;
+    background-image:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 27px,
+            rgba(0, 0, 0, 0.03) 27px,
+            rgba(0, 0, 0, 0.03) 28px);
+    border: none;
+    border-radius: 2px;
+    padding: 0;
+    max-width: 1400px;
+    width: 95%;
+    text-align: left;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.1),
+        4px 4px 20px rgba(0, 0, 0, 0.3),
+        inset 0 0 80px rgba(0, 0, 0, 0.03);
+    transform: scale(0.9) translateY(30px);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'Special Elite', 'Courier Prime', 'Courier New', monospace;
+    color: #2c2416;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+/* Aged paper edge effect */
+.modal-content.dossier-page::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 2px;
+    box-shadow: inset 0 0 40px rgba(139, 119, 80, 0.15);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .modal.active .modal-content {
     transform: scale(1) translateY(0);
 }
 
-.success-icon {
-    width: 80px;
-    height: 80px;
-    background: rgba(46, 125, 50, 0.1);
-    color: #2e7d32;
-    border: 3px solid #2e7d32;
+/* Left column — dossier text */
+.dossier-left {
+    flex: 1;
+    padding: 2.5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Simulated coffee stain on left side */
+.dossier-left::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
+    background: radial-gradient(circle, rgba(160, 120, 70, 0.12) 30%, rgba(160, 120, 70, 0.06) 60%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Right column — certificate with paperclip */
+.dossier-right {
+    flex: 0 0 580px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 40px;
-    margin: 0 auto 1.5rem auto;
-    box-shadow: 0 0 20px rgba(46, 125, 50, 0.2);
-    animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards 0.2s;
+    padding: 2.5rem 3.5rem 2.5rem 2rem;
+    position: relative;
+    /* Add perspective for a subtle 3D lift */
+    perspective: 1000px;
 }
 
-.modal h2 {
-    font-size: 2.5rem;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 800;
+/* Certificate image container for relative positioning */
+.certificate-wrapper {
+    position: relative;
+    transform: rotate(3deg);
+    transition: transform 0.3s ease;
 }
 
-.reveal-text {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
-    font-weight: 600;
+.certificate-wrapper:hover {
+    transform: rotate(0deg) scale(1.03);
 }
 
-.reveal-text.highlight {
-    color: #1a1a1a;
-    font-weight: 700;
-    margin-bottom: 2rem;
+/* Paperclip — pure CSS */
+.paperclip {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    width: 24px;
+    height: 70px;
+    z-index: 10;
+    transform: rotate(-12deg);
+    /* Drop shadow to lift it off the photo */
+    filter: drop-shadow(2px 3px 2px rgba(0, 0, 0, 0.3));
 }
 
-/* Modal Stats Panel */
-.stats-panel {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin: 1.5rem 0 2rem 0;
+/* The back wire of the paperclip (goes BEHIND the photo conceptually, but we fake it by clipping/layering) */
+.paperclip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 70px;
+    border: 3px solid #b0b0b0;
+    border-radius: 12px;
+    background: transparent;
+    box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.4);
+    /* Clip the back wire so it looks like it goes behind the photo */
+    clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%);
 }
 
-.stat-box {
-    background: #f8fafc;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+/* The front wire of the paperclip (stays ON TOP of the photo) */
+.paperclip::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 4px;
+    width: 16px;
+    height: 56px;
+    border: 3px solid #e0e0e0;
     border-radius: 8px;
-    padding: 1rem 1.5rem;
-    min-width: 140px;
+    background: transparent;
 }
 
-.stat-value {
+/* Certificate image */
+.certificat-img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 3px;
+    box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.25);
     display: block;
-    font-size: 2rem;
-    font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
+    position: relative;
+    z-index: 2;
+    background: white;
+    padding: 4px;
+    /* like a photo border */
 }
 
-.stat-label {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+/* Responsive adjustment */
+@media (max-width: 700px) {
+    .dossier-right {
+        padding: 1rem;
+    }
+}
+
+/* Header with ref and date */
+.dossier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #2c2416;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    color: #5a4a32;
+}
+
+.dossier-ref {
+    font-weight: 700;
+}
+
+.dossier-date {
+    font-style: italic;
+}
+
+/* DÉCLASSIFIÉ stamp */
+.classified-stamp {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #c00000;
+    border: 5px solid #c00000;
+    padding: 0.15rem 1.2rem;
+    display: inline-block;
+    transform: rotate(-6deg);
+    opacity: 0.8;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+    margin: 0.3rem 0 1.2rem 0;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2) inset;
+    animation: stampIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards 0.3s;
+}
+
+@keyframes stampIn {
+    0% {
+        transform: rotate(-6deg) scale(2.5);
+        opacity: 0;
+    }
+
+    60% {
+        transform: rotate(-6deg) scale(0.95);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: rotate(-6deg) scale(1);
+        opacity: 0.8;
+    }
+}
+
+/* Dossier body */
+.dossier-body {
+    margin-bottom: 0.5rem;
+}
+
+.dossier-field {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    align-items: baseline;
+}
+
+.field-label {
+    font-weight: 700;
+    white-space: nowrap;
+    color: #5a4a32;
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+}
+
+.field-value {
+    border-bottom: 1px solid rgba(44, 36, 22, 0.3);
+    flex: 1;
+    padding-bottom: 2px;
+    font-size: 1.3rem;
+}
+
+.field-value.status-approved {
+    color: #1a6b20;
+    font-weight: 700;
+    font-size: 1.45rem;
+}
+
+.dossier-divider {
+    height: 1px;
+    background: repeating-linear-gradient(90deg,
+            #2c2416 0px,
+            #2c2416 4px,
+            transparent 4px,
+            transparent 8px);
+    margin: 1rem 0;
+    opacity: 0.4;
+}
+
+.dossier-text {
+    font-size: 1.3rem;
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+    color: #3a3020;
+}
+
+.dossier-text.highlight {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 /* LE MACARON A */
 .macaron-a {
     background: white;
     color: #ef4444;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 90px;
+    font-size: 72px;
     font-weight: 800;
     font-family: Arial, sans-serif;
-    border: 6px solid #ef4444;
-    margin: 2rem auto;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border: 5px solid #ef4444;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transform: rotate(-10deg);
-    animation: dropInA 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards 0.4s;
+    animation: dropInA 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards 0.5s;
 }
 
+/* Footer */
+.dossier-footer {
+    text-align: center;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(44, 36, 22, 0.2);
+}
+
+.dossier-signature {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: #8a7a62;
+    text-transform: uppercase;
+}
+
+/* Close button — dossier style */
 .cyber-btn.outlined {
+    display: block;
+    margin: 1rem auto 0 auto;
     background: transparent;
-    color: var(--text-primary);
-    border: 2px solid var(--text-primary);
-    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
-    margin-top: 1rem;
+    color: #2c2416;
+    border: 2px solid #2c2416;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    padding: 0.6rem 1.5rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
 }
 
 .cyber-btn.outlined:hover {
-    background: rgba(0, 0, 0, 0.05);
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
+    background: rgba(44, 36, 22, 0.08);
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
+    transform: translate(-2px, -2px);
+}
+
+/* Responsive — stack on small screens */
+@media (max-width: 700px) {
+    .modal-content.dossier-page {
+        flex-direction: column;
+        max-width: 95%;
+    }
+
+    .dossier-right {
+        flex: none;
+        padding: 1.5rem;
+    }
+
+    .certificat-img {
+        max-width: 220px;
+    }
 }
 
 /* Animations */
@@ -694,6 +921,143 @@ h1 span {
         transform: scale(1) rotate(-10deg);
         opacity: 1;
         filter: blur(0);
+    }
+}
+
+/* -------------------------------------------
+   EXTRA FILES SECTION (Post-Reveal)
+------------------------------------------- */
+
+.reveal-extras-wrapper {
+    text-align: center;
+    margin: 3rem 0;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.reveal-extras-wrapper.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.cyber-btn-secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+}
+
+.cyber-btn-secondary.hidden {
+    display: none;
+}
+
+.cyber-btn-secondary:hover {
+    background: var(--accent);
+    color: white;
+}
+
+.extra-files {
+    width: 100%;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.2);
+    animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.extra-files.hidden {
+    display: none;
+}
+
+.extra-files-title {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    color: #444;
+    letter-spacing: 3px;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+/* Media Grid Layout */
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.media-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.media-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.media-card video,
+.media-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    background: #000;
+}
+
+.media-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 2rem;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.media-placeholder.video::after {
+    content: '▶';
+}
+
+.media-placeholder.photo::after {
+    content: '📷';
+}
+
+.media-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    color: #475569;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.media-desc strong {
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Responsive Media Grid */
+@media (max-width: 900px) {
+    .media-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .media-grid {
+        grid-template-columns: 1fr;
     }
 }
 

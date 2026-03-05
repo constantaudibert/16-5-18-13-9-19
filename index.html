@@ -7,13 +7,16 @@
     <title>Dossier Déclassifié</title>
     <link rel="stylesheet" href="style.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
+    <!-- Audio element -->
+    <audio id="reveal-audio" src="Surprise+j'ai+le+permis.MP3"></audio>
     <!-- Intro Sequence Overlay -->
-    <div id="intro-overlay" class="intro-overlay">
+    <div id="intro-overlay" class="intro-overlay" style="display:none">
         <div class="folder-wrapper" id="folder-trigger">
             <div class="folder-back">
                 <div class="folder-tab"></div>
@@ -23,7 +26,7 @@
                 <div class="top-secret-stamp">TOP SECRET</div>
                 <div class="folder-creases"></div>
             </div>
-            <div class="intro-hint">[ Cliquez pour ouvrir ]</div>
+            <div class="intro-hint">Déclasification du dossier en cours...</div>
         </div>
     </div>
 
@@ -31,7 +34,7 @@
     <div class="container">
         <header>
             <div class="header-top">
-                <h1>Dossier <span>#16-5-18-13-9-19</span></h1>
+                <h1>Dossier <span>#1651813919</span></h1>
             </div>
             <p class="subtitle">Analyse d'acquisition de compétence mobile</p>
             <p class="date-range">13 Jan 2025 – 26 Fév 2026</p>
@@ -50,10 +53,10 @@
                         <div class="box lv-0"></div><span>Inactif</span>
                     </div>
                     <div class="legend-item">
-                        <div class="box lv-1"></div><span>Archive / Initialisation</span>
+                        <div class="box lv-1"></div><span>Initialisation</span>
                     </div>
                     <div class="legend-item">
-                        <div class="box lv-3"></div><span>Déploiement</span>
+                        <div class="box lv-3"></div><span>Entraînement</span>
                     </div>
                     <div class="legend-item">
                         <div class="box lv-5"></div><span>Échec</span>
@@ -61,12 +64,6 @@
                     <div class="legend-item">
                         <div class="box lv-4"></div><span>Objectif Atteint</span>
                     </div>
-                </div>
-
-                <div class="action-section">
-                    <button id="decrypt-btn" class="cyber-btn hidden">
-                        <span class="btn-text">DÉCHIFFRER LA CONCLUSION</span>
-                    </button>
                 </div>
             </div>
 
@@ -76,28 +73,86 @@
                 </div>
             </div>
         </main>
+
+        <!-- Hidden Section: Extra Declassified Files -->
+        <div id="extra-files-section" class="extra-files hidden">
+            <h2 class="extra-files-title">ARCHIVES SUPPLÉMENTAIRES</h2>
+            <div class="media-grid">
+
+                <div class="media-card">
+                    <video src="conduite_parking.mp4" controls></video>
+                    <p class="media-desc"><strong>PREMIER PAS</strong><br>Entrainement illégal sur parking (Caméra
+                        espion)</p>
+                </div>
+
+                <div class="media-card">
+                    <video src="spy_video.mp4" controls></video>">
+                    <p class="media-desc"><strong>SURVEILLANCE RAPPROCHÉE</strong><br>Sujet pisté pendant ses premières
+                        heures</p>
+                </div>
+
+                <div class="media-card">
+                    <video src="conduite_apres_permis.mp4" controls></video>
+                    <p class="media-desc"><strong>POST-PERMIS</strong><br>Le sujet ramène ses amis après
+                        une soirée</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Button to reveal extra files (centered at bottom after modal closes) -->
+        <div id="reveal-extras-wrapper" class="reveal-extras-wrapper hidden">
+            <button id="btn-reveal-extras" class="cyber-btn cyber-btn-secondary">VOIR LES AUTRES FICHIERS
+                DÉCLASSIFIÉS</button>
+        </div>
     </div>
 
-    <!-- Modal for Reveal -->
+    <!-- Modal for Reveal — Classified Dossier Style (Landscape) -->
     <div id="reveal-modal" class="modal">
         <div class="modal-backdrop"></div>
-        <div class="modal-content glass-panel">
-            <div class="success-icon">✓</div>
-            <h2>J'AI LE PERMIS !</h2>
-            <p class="reveal-text">Surprise... Je prends des heures de conduite en secret depuis plus d'un an.</p>
-            <p class="reveal-text highlight">Préparez-vous à me prêter la voiture ! 🚗💨</p>
-            <div class="macaron-a">A</div>
-            <div class="stats-panel">
-                <div class="stat-box">
-                    <span class="stat-value" id="val-hours">0</span>
-                    <span class="stat-label">Heures de conduite</span>
+        <div class="modal-content dossier-page">
+            <!-- Left: Dossier text -->
+            <div class="dossier-left">
+                <div class="dossier-header">
+                    <span class="dossier-ref">RÉF: DOSSIER #1651813919</span>
+                    <span class="dossier-date">26 FÉVRIER 2026</span>
                 </div>
-                <div class="stat-box">
-                    <span class="stat-value">2</span>
-                    <span class="stat-label">Tentatives pratiques</span>
+
+                <div class="classified-stamp">DÉCLASSIFIÉ</div>
+
+                <div class="dossier-body">
+                    <div class="dossier-field">
+                        <span class="field-label">OBJET :</span>
+                        <span class="field-value">VALIDATION FINALE — PERMIS DE CONDUIRE</span>
+                    </div>
+                    <div class="dossier-field">
+                        <span class="field-label">STATUT :</span>
+                        <span class="field-value status-approved">✓ CIBLE ACQUISE</span>
+                    </div>
+
+                    <div class="dossier-divider"></div>
+
+                    <p class="dossier-text">Sous l'impulsion de ses amis, le sujet a mené une opération secrète
+                        d'acquisition de compétence mobile
+                        pendant plus d'un an.</p>
+                </div>
+
+                <div class="macaron-a">A</div>
+
+                <div class="dossier-footer">
+                    <span class="dossier-signature">CONFIDENTIEL — NE PAS REPRODUIRE</span>
+                </div>
+
+                <button id="close-modal" class="cyber-btn outlined">REFERMER LE DOSSIER</button>
+            </div>
+
+            <!-- Right: Certificate with paperclip -->
+            <div class="dossier-right">
+                <div class="certificate-wrapper">
+                    <div class="paperclip"></div>
+                    <img src="certificat.png" alt="Certificat de réussite" class="certificat-img">
                 </div>
             </div>
-            <button id="close-modal" class="cyber-btn outlined">REFERMER LE DOSSIER</button>
         </div>
     </div>
 
